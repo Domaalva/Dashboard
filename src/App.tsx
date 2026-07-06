@@ -1,5 +1,7 @@
 import Grid from '@mui/material/Grid';
 import './App.css';
+import HeaderUI from './components/HeaderUI';
+import AlertUI from './components/AlertUI';
 
 function App() {
   return (
@@ -7,18 +9,22 @@ function App() {
       container
       spacing={5}
       sx={{
-        justifyContent: "left",
+        justifyContent: "flex-start",
         alignItems: "center",
       }}
     >
       {/* Encabezado */}
       <Grid size={{ xs: 12, md: 12 }}>
-        Elemento: Encabezado
+        <HeaderUI />
       </Grid>
 
       {/* Alertas */}
-      <Grid size={{ xs: 12, md: 12 }}>
-        Elemento: Alertas
+      <Grid
+        container
+        size={{ xs: 12, md: 12 }}
+        sx={{ justifyContent: "flex-end", alignItems: "center" }}
+      >
+        <AlertUI description="No se preveen lluvias" />
       </Grid>
 
       {/* Selector */}
