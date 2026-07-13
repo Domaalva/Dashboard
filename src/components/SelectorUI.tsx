@@ -6,11 +6,14 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 
-export default function SelectorUI() {
-  const [cityInput, setCityInput] = useState("");
+interface SelectorUIProps {
+  city: string;
+  onCityChange: (city: string) => void;
+}
 
+export default function SelectorUI({ city, onCityChange }: SelectorUIProps) {
   const handleChange = (event: SelectChangeEvent<string>) => {
-    setCityInput(event.target.value);
+    onCityChange(event.target.value);
   };
 
   return (
@@ -24,7 +27,7 @@ export default function SelectorUI() {
           labelId="city-select-label"
           id="city-simple-select"
           label="Ciudad"
-          value={cityInput}
+          value={city}
           onChange={handleChange}
         >
           <MenuItem value="" disabled>
@@ -38,11 +41,11 @@ export default function SelectorUI() {
         </Select>
       </FormControl>
 
-      {cityInput && (
+      {city && (
         <Typography sx={{ mt: 2 }}>
           Información del clima en{" "}
           <strong>
-            {cityInput.charAt(0).toUpperCase() + cityInput.slice(1)}
+            {city.charAt(0).toUpperCase() + city.slice(1)}
           </strong>
         </Typography>
       )}
