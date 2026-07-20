@@ -10,8 +10,9 @@ import TableUI from "./components/TableUI";
 import ChartUI from "./components/ChartUI";
 
 function App() {
-  const [selectedCity, setSelectedCity] = useState("");
-  const dataFetcherOutput = useFetchData(selectedCity);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const dataFetcherOutput = useFetchData(selectedOption);
+
 
   return (
     <Grid
@@ -42,9 +43,10 @@ function App() {
       {/* Selector */}
       <Grid size={{ xs: 12, md: 3 }}>
         <SelectorUI
-          city={selectedCity}
-          onCityChange={setSelectedCity}
+          city={selectedOption ?? ""}
+            onOptionSelect={setSelectedOption}
         />
+
       </Grid>
 
       {/* Indicadores */}

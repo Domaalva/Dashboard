@@ -1,4 +1,3 @@
-import { useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
@@ -6,14 +5,21 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 
-interface SelectorUIProps {
+interface SelectorProps {
   city: string;
-  onCityChange: (city: string) => void;
+  onOptionSelect: (option: string) => void;
 }
 
-export default function SelectorUI({ city, onCityChange }: SelectorUIProps) {
+export default function SelectorUI({
+  city,
+  onOptionSelect,
+}: SelectorProps) {
+
   const handleChange = (event: SelectChangeEvent<string>) => {
-    onCityChange(event.target.value);
+    const selectedValue = event.target.value;
+
+    // Comunica el cambio al componente padre (App.tsx)
+    onOptionSelect(selectedValue);
   };
 
   return (
@@ -34,10 +40,21 @@ export default function SelectorUI({ city, onCityChange }: SelectorUIProps) {
             <em>Seleccione una ciudad</em>
           </MenuItem>
 
-          <MenuItem value="guayaquil">Guayaquil</MenuItem>
-          <MenuItem value="quito">Quito</MenuItem>
-          <MenuItem value="manta">Manta</MenuItem>
-          <MenuItem value="cuenca">Cuenca</MenuItem>
+          <MenuItem value="guayaquil">
+            Guayaquil
+          </MenuItem>
+
+          <MenuItem value="quito">
+            Quito
+          </MenuItem>
+
+          <MenuItem value="manta">
+            Manta
+          </MenuItem>
+
+          <MenuItem value="cuenca">
+            Cuenca
+          </MenuItem>
         </Select>
       </FormControl>
 
