@@ -6,6 +6,8 @@ import AlertUI from "./components/AlertUI";
 import SelectorUI from "./components/SelectorUI";
 import IndicatorUI from "./components/IndicatorUI";
 import useFetchData from "./hooks/useFetchData";
+import TableUI from "./components/TableUI";
+import ChartUI from "./components/ChartUI";
 
 function App() {
   const [selectedCity, setSelectedCity] = useState("");
@@ -29,71 +31,75 @@ function App() {
       <Grid
         container
         size={{ xs: 12, md: 12 }}
-        sx={{ justifyContent: "flex-end", alignItems: "center" }}
+        sx={{
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
       >
         <AlertUI description="No se preveen lluvias" />
       </Grid>
 
       {/* Selector */}
       <Grid size={{ xs: 12, md: 3 }}>
-        <SelectorUI city={selectedCity} onCityChange={setSelectedCity} />
+        <SelectorUI
+          city={selectedCity}
+          onCityChange={setSelectedCity}
+        />
       </Grid>
 
       {/* Indicadores */}
       <Grid container size={{ xs: 12, md: 9 }} spacing={2}>
+        <Grid size={{ xs: 12, md: 3 }}>
+          <IndicatorUI
+            title="Temperatura (2m)"
+            description={
+              dataFetcherOutput
+                ? `${dataFetcherOutput.current.temperature_2m}${dataFetcherOutput.current_units.temperature_2m}`
+                : "Cargando..."
+            }
+          />
+        </Grid>
 
-      <Grid size={{ xs: 12, md: 3 }}>
-      <IndicatorUI
-      title="Temperatura (2m)"
-      description={
-        dataFetcherOutput
-          ? `${dataFetcherOutput.current.temperature_2m}${dataFetcherOutput.current_units.temperature_2m}`
-          : "Cargando..."
-      }
-      />
+        <Grid size={{ xs: 12, md: 3 }}>
+          <IndicatorUI
+            title="Temperatura aparente"
+            description={
+              dataFetcherOutput
+                ? `${dataFetcherOutput.current.apparent_temperature}${dataFetcherOutput.current_units.apparent_temperature}`
+                : "Cargando..."
+            }
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <IndicatorUI
+            title="Velocidad del viento"
+            description={
+              dataFetcherOutput
+                ? `${dataFetcherOutput.current.wind_speed_10m}${dataFetcherOutput.current_units.wind_speed_10m}`
+                : "Cargando..."
+            }
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 3 }}>
+          <IndicatorUI
+            title="Humedad relativa"
+            description={
+              dataFetcherOutput
+                ? `${dataFetcherOutput.current.relative_humidity_2m}${dataFetcherOutput.current_units.relative_humidity_2m}`
+                : "Cargando..."
+            }
+          />
+        </Grid>
       </Grid>
-
-      <Grid size={{ xs: 12, md: 3 }}>
-      <IndicatorUI
-      title="Temperatura aparente"
-      description={
-        dataFetcherOutput
-          ? `${dataFetcherOutput.current.apparent_temperature}${dataFetcherOutput.current_units.apparent_temperature}`
-          : "Cargando..."
-      }
-      />
-      </Grid>
-
-      <Grid size={{ xs: 12, md: 3 }}>
-      <IndicatorUI
-      title="Velocidad del viento"
-      description={
-        dataFetcherOutput
-          ? `${dataFetcherOutput.current.wind_speed_10m}${dataFetcherOutput.current_units.wind_speed_10m}`
-          : "Cargando..."
-        }
-      />
-    </Grid>
-
-    <Grid size={{ xs: 12, md: 3 }}>
-    <IndicatorUI
-      title="Humedad relativa"
-      description={
-        dataFetcherOutput
-          ? `${dataFetcherOutput.current.relative_humidity_2m}${dataFetcherOutput.current_units.relative_humidity_2m}`
-          : "Cargando..."
-      }
-    />
-    </Grid>
-
-    </Grid>
 
       {/* Gráfico */}
       <Grid
         size={{ xs: 12, md: 6 }}
         sx={{ display: { xs: "none", md: "block" } }}
       >
-        Elemento: Gráfico
+        <ChartUI data={dataFetcherOutput} />
       </Grid>
 
       {/* Tabla */}
@@ -101,7 +107,7 @@ function App() {
         size={{ xs: 12, md: 6 }}
         sx={{ display: { xs: "none", md: "block" } }}
       >
-        Elemento: Tabla
+        <TableUI data={dataFetcherOutput} />
       </Grid>
 
       {/* Información adicional */}
