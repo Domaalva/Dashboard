@@ -11,28 +11,38 @@ const CITY_COORDS: Record<
   cuenca: { latitude: -2.9, longitude: -78.98 },
 };
 
+interface FetchDataState {
+  data: OpenMeteoResponse | null;
+  loading: boolean;
+  error: string | null;
+}
+
 export default function useFetchData(
   selectedOption: string | null
-): OpenMeteoResponse | null {
+): FetchDataState {
 
   const [data, setData] = useState<OpenMeteoResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
 
-    const cityKey = selectedOption ?? "guayaquil";
-
-    const cityConfig = CITY_COORDS[cityKey];
-
-    if (!cityConfig) {
-      console.error("Ciudad no encontrada:", cityKey);
-      setData(null);
-      return;
-    }
-
-    const URL = `https://api.open-meteo.com/v1/forecast?latitude=${cityConfig.latitude}&longitude=${cityConfig.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`;
-
     const fetchData = async () => {
+
       try {
+        setLoading(true);
+        setError(null);
+
+        const cityKey = selectedOption ?? "guayaquil";
+
+        const cityConfig = CITY_COORDS[cityKey];
+
+        if (!cityConfig) {
+          throw new Error("Ciudad no encontrada");
+        }
+
+        const URL = `https://api.open-meteo.com/v1/forecast?latitude=${cityConfig.latitude}&longitude=${cityConfig.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`;
+
         const response = await fetch(URL);
 
         if (!response.ok) {
@@ -43,9 +53,18 @@ export default function useFetchData(
 
         setData(json);
 
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Error desconocido");
+        }
+
         setData(null);
+
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -53,5 +72,9 @@ export default function useFetchData(
 
   }, [selectedOption]);
 
-  return data;
+  return {
+    data,
+    loading,
+    error,
+  };
 }

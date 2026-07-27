@@ -11,7 +11,8 @@ import ChartUI from "./components/ChartUI";
 
 function App() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const dataFetcherOutput = useFetchData(selectedOption);
+  const { data, loading, error } = useFetchData(selectedOption);
+
 
 
   return (
@@ -55,10 +56,13 @@ function App() {
           <IndicatorUI
             title="Temperatura (2m)"
             description={
-              dataFetcherOutput
-                ? `${dataFetcherOutput.current.temperature_2m}${dataFetcherOutput.current_units.temperature_2m}`
-                : "Cargando..."
+              loading
+                ? "Cargando..."
+                : error
+                ? "Error al cargar"
+                : `${data?.current.temperature_2m}${data?.current_units.temperature_2m}`
             }
+
           />
         </Grid>
 
@@ -66,10 +70,13 @@ function App() {
           <IndicatorUI
             title="Temperatura aparente"
             description={
-              dataFetcherOutput
-                ? `${dataFetcherOutput.current.apparent_temperature}${dataFetcherOutput.current_units.apparent_temperature}`
-                : "Cargando..."
+              loading
+                ? "Cargando..."
+                : error
+                ? "Error al cargar"
+                : `${data?.current.apparent_temperature}${data?.current_units.apparent_temperature}`
             }
+
           />
         </Grid>
 
@@ -77,10 +84,13 @@ function App() {
           <IndicatorUI
             title="Velocidad del viento"
             description={
-              dataFetcherOutput
-                ? `${dataFetcherOutput.current.wind_speed_10m}${dataFetcherOutput.current_units.wind_speed_10m}`
-                : "Cargando..."
+              loading
+                ? "Cargando..."
+                : error
+                ? "Error al cargar"
+                : `${data?.current.wind_speed_10m}${data?.current_units.wind_speed_10m}`
             }
+
           />
         </Grid>
 
@@ -88,10 +98,13 @@ function App() {
           <IndicatorUI
             title="Humedad relativa"
             description={
-              dataFetcherOutput
-                ? `${dataFetcherOutput.current.relative_humidity_2m}${dataFetcherOutput.current_units.relative_humidity_2m}`
-                : "Cargando..."
+              loading
+                ? "Cargando..."
+                : error
+                ? "Error al cargar"
+                : `${data?.current.relative_humidity_2m}${data?.current_units.relative_humidity_2m}`
             }
+
           />
         </Grid>
       </Grid>
@@ -101,7 +114,7 @@ function App() {
         size={{ xs: 12, md: 6 }}
         sx={{ display: { xs: "none", md: "block" } }}
       >
-        <ChartUI data={dataFetcherOutput} />
+        <ChartUI data={data} />
       </Grid>
 
       {/* Tabla */}
@@ -109,7 +122,7 @@ function App() {
         size={{ xs: 12, md: 6 }}
         sx={{ display: { xs: "none", md: "block" } }}
       >
-        <TableUI data={dataFetcherOutput} />
+        <TableUI data={data} />
       </Grid>
 
       {/* Información adicional */}
